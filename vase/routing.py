@@ -28,10 +28,11 @@ class RoutingHttpProcessor(BaseProcessor):
         return (yield from self._handler.handle(**matchdict))
 
     def on_timeout(self):
-        self._handler.on_timeout()
-        if self._handler.persistent_connection():
-            return
-        super().on_timeout()
+        if self._handler is not None:
+            self._handler.on_timeout()
+            if self._handler.persistent_connection():
+                return
+            super().on_timeout()
 
     def connection_lost(self, exc):
         if self._handler is not None:
