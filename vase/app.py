@@ -69,6 +69,9 @@ class Vase:
             return RoutingHttpProcessor(transport, protocol, reader, writer, routes=self._routes)
         asyncio.async(loop.create_server(lambda: BaseHttpProtocol(processor_factory, loop=loop),
                     host, port))
+
+    def run_forever(self, **kwargs):
+        self.run(**kwargs)
         loop.run_forever()
 
     @staticmethod

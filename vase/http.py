@@ -164,7 +164,10 @@ class HttpWriter(StreamWriter):
 
     def _maybe_send_headers(self):
         if not self._headers_sent:
-            _to_send = 'HTTP/{} {}'.format(self.version, self._status.decode('ascii')).encode('ascii') + self.delimiter
+            status = self._status
+            if (isinstance(status, bytes)):
+                status = status.decode('ascii')
+            _to_send = 'HTTP/{} {}'.format(self.version, status).encode('ascii') + self.delimiter
             for name, value in self.items():
                 if isinstance(name, str):
                     name = name.encode('ascii')
